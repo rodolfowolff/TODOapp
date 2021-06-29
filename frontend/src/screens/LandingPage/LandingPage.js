@@ -1,16 +1,18 @@
-import React, { useEffect } from 'react';
-import { Button, Container, Row } from 'react-bootstrap';
-import "./LandingPage.css";
+import React, { useEffect } from "react";
+import { Button, Container, Row } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import "./LandingStyles.css";
 
-const LandingPage = () => {
+function LandingPage({ history }) {
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
-  // useEffectect(() => {
-  //   const userInfo = localStorage.getItem('userInfo');
-
-  //   if (userInfo) {
-  //     history.push('/mynotes');
-  //   }
-  // }, [history]);
+  useEffect(() => {
+    if (userInfo) {
+      history.push("/mynotes");
+    }
+  }, [history, userInfo]);
 
   return (
     <div className="main">
@@ -18,33 +20,30 @@ const LandingPage = () => {
         <Row>
           <div className="intro-text">
             <div>
-              <h1 className="title">Landing Page</h1>
-              <p className="subtitle">One safe place for all</p>
+              <h1 className="title">Welcome to Note Zipper</h1>
+              <p className="subtitle">One Safe place for all your notes.</p>
             </div>
             <div className="buttonContainer">
-              <a href="/login">
-                <Button
-                  size="lg"
-                  className="landingbutton"
-                >
+              <Link to="/login">
+                <Button size="lg" className="landingbutton">
                   Login
                 </Button>
-              </a>
-              <a href="/register">
+              </Link>
+              <Link to="/register">
                 <Button
+                  variant="outline-primary"
                   size="lg"
                   className="landingbutton"
-                  variant="outline-secondary"
                 >
                   Signup
                 </Button>
-              </a>
+              </Link>
             </div>
           </div>
         </Row>
       </Container>
     </div>
   );
-};
+}
 
 export default LandingPage;

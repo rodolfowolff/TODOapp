@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import MainScreen from '../../components/MainScreen';
 import Loading from '../../components/Loading';
-import ErrorMessage from '../../components/ErroMessage';
+import ErrorMessage from '../../components/ErrorMessage';
 import './LoginScreen.css';
 import { login } from '../../actions/userActions';
 

@@ -5,9 +5,9 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import MainScreen from '../../components/MainScreen';
 import Loading from '../../components/Loading';
-import ErrorMessage from '../../components/ErroMessage';
+import ErrorMessage from '../../components/ErrorMessage';
 
-import { listNotes } from '../../actions/notesActions';
+import { deleteNoteAction, listNotes } from '../../actions/notesActions';
 
 const MyNotes = () => {
   const dispatch = useDispatch();
@@ -18,10 +18,26 @@ const MyNotes = () => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const noteCreate = useSelector((state) => state.noteCreate);
+  const { success: successCreate } = noteCreate;
+
+  const noteUpdate = useSelector((state) => state.noteUpdate);
+  const { success: successUpdate } = noteUpdate;
+
+  const noteDelete = useSelector((state) => state.noteDelete);
+  const {
+    loading: loadingDelete,
+    error: errorDelete,
+    success: successDelete
+  } = noteDelete;
+
   const deleteHandler = (id) => {
     if (window.confirm('Are you sure?')) {
+      dispatch(deleteNoteAction(id));
     }
   };
+
+  console.log(notes);
 
   const history = useHistory();
 
@@ -32,21 +48,23 @@ const MyNotes = () => {
       history.push('/');
     }
 
-  }, [dispatch, history, userInfo]);
+  }, [dispatch, successCreate, history, userInfo, successUpdate, successDelete]);
 
   return (
     <MainScreen title={ `Welcome ${userInfo.name}` }>
       <Link to='createnote'>
         <Button style={ { marginLeft: 10, MarginBottom: 6 } } size='lg'>
-          Create a new
+          Create a new Note
         </Button>
       </Link>
 
-      { error && <ErrorMessage variant='danger'>{ error }</ErrorMessage> }
+      { errorDelete && <ErrorMessage variant='danger'>{ errorDelete }</ErrorMessage> }
+      { loadingDelete && <Loading /> }
 
+      { error && <ErrorMessage variant='danger'>{ error }</ErrorMessage> }
       { loading && <Loading /> }
 
-      { notes?.map((note) => (
+      { notes?.reverse().map((note) => (
         <Accordion key={ note._id }>
           <Card style={ { margin: 10 } }>
             <Card.Header style={ { display: 'flex' } }>
