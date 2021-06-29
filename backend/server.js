@@ -3,6 +3,7 @@ const notes = require('./data/notes');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const userRoutes = require('./routes/useRoutes');
+const noteRoutes = require('./routes/noteRoutes');
 const { errorHandler, notFound } = require('./middlewares/errorMiddleware');
 
 const app = express();
@@ -10,15 +11,16 @@ dotenv.config();
 connectDB();
 app.use(express.json());
 
-// app.get('/', (req, res) => {
-//   res.send("API is runnig");
-// });
-
-app.get('/api/notes', (req, res) => {
-  res.json(notes);
+app.get('/', (req, res) => {
+  res.send("API is runnig");
 });
 
+// app.get('/api/notes', (req, res) => {
+//   res.json(notes);
+// });
+
 app.use('/api/users', userRoutes);
+app.use('/api/notes', noteRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
